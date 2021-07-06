@@ -10,14 +10,14 @@ func main() {
 	input, _ := reader.ReadString('\n')
 	tagsWriter := bufio.NewWriter(os.Stderr)
 	textWriter := bufio.NewWriter(os.Stdout)
-	writer := &textWriter
+	writer := textWriter
 	for _, c := range input {
 		if c == '<' {
-			writer = &tagsWriter
+			writer = tagsWriter
 		}
-		(*writer).WriteString(string(c))
+		writer.WriteString(string(c))
 		if c == '>' {
-			writer = &textWriter
+			writer = textWriter
 		}
 	}
 	tagsWriter.Flush()
