@@ -8,18 +8,28 @@ import (
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
-	tagsWriter := bufio.NewWriter(os.Stderr)
+
+	text, tags := split(input)
+
 	textWriter := bufio.NewWriter(os.Stdout)
-	writer := textWriter
+	textWriter.Write([]byte(text))
+	textWriter.Flush()
+
+	tagsWriter := bufio.NewWriter(os.Stderr)
+	tagsWriter.Write([]byte(tags))
+	tagsWriter.Flush()
+}
+
+func split(input string) (text, tags string) {
+	var out = &text
 	for _, c := range input {
 		if c == '<' {
-			writer = tagsWriter
+			out = &tags
 		}
-		writer.WriteString(string(c))
+		*out += string(c)
 		if c == '>' {
-			writer = textWriter
+			out = &text
 		}
 	}
-	tagsWriter.Flush()
-	textWriter.Flush()
+	return text, tags
 }
